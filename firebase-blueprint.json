@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "Category": {
+      "title": "Category",
+      "description": "Expense category",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "icon": { "type": "string" },
+        "color": { "type": "string" },
+        "budget": { "type": "number" },
+        "uid": { "type": "string" }
+      },
+      "required": ["name", "icon", "color", "uid"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "Expense record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "amount": { "type": "number" },
+        "description": { "type": "string" },
+        "date": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "uid": { "type": "string" }
+      },
+      "required": ["amount", "description", "date", "categoryId", "uid"]
+    },
+    "Income": {
+      "title": "Income",
+      "description": "Income record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "amount": { "type": "number" },
+        "description": { "type": "string" },
+        "date": { "type": "string" },
+        "source": { "type": "string" },
+        "uid": { "type": "string" }
+      },
+      "required": ["amount", "description", "date", "source", "uid"]
+    }
+  },
+  "firestore": {
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Collection of expense categories"
+    },
+    "/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "Collection of expense records"
+    },
+    "/incomes/{incomeId}": {
+      "schema": "Income",
+      "description": "Collection of income records"
+    }
+  }
+}
