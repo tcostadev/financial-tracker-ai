@@ -16,4 +16,8 @@ const firestoreDatabaseId = import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID 
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app, firestoreDatabaseId);
+
+// Use the provided ID, but fallback to default if it's empty or explicitly '(default)'
+export const db = (firestoreDatabaseId && firestoreDatabaseId !== '(default)')
+  ? getFirestore(app, firestoreDatabaseId)
+  : getFirestore(app);
