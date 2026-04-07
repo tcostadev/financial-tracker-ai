@@ -59,7 +59,7 @@ Para que a aplicação funcione com a tua própria base de dados, segue estes pa
 | `VITE_FIREBASE_STORAGE_BUCKET` | `teu-projeto.firebasestorage.app` |
 | `VITE_FIREBASE_MESSAGING_SENDER_ID` | `123456789` |
 | `VITE_FIREBASE_APP_ID` | `1:123456...` |
-| `VITE_FIREBASE_FIRESTORE_DATABASE_ID` | `(default)` ou o ID no ficheiro config |
+| `VITE_FIREBASE_FIRESTORE_DATABASE_ID` | `(default)` (Opcional) |
 
 5.  Clica em **"Deploy"**.
 
