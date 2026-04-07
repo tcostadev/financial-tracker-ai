@@ -45,7 +45,7 @@ Para que a aplicação funcione com a tua própria base de dados, segue estes pa
 1.  Vai a **Authentication** -> **Settings** -> **Authorized Domains**.
 2.  Adiciona o domínio onde a tua app vai estar (ex: `localhost` para testes locais e `teu-projeto.vercel.app` para produção).
 
-### 3. Deploy na Vercel
+### 3. Opção A: Deploy na Vercel
 1.  Cria uma conta na [Vercel](https://vercel.com).
 2.  Clica em **"Add New"** -> **"Project"**.
 3.  Importa o teu repositório do GitHub.
@@ -62,6 +62,54 @@ Para que a aplicação funcione com a tua própria base de dados, segue estes pa
 | `VITE_FIREBASE_FIRESTORE_DATABASE_ID` | `(default)` ou o ID no ficheiro config |
 
 5.  Clica em **"Deploy"**.
+
+### 4. Opção B: Deploy no Firebase Hosting (Recomendado)
+
+Como já estás a usar o Firebase para a base de dados, podes também alojar o site lá:
+
+1.  **Instalar o Firebase CLI**:
+    ```bash
+    npm install -g firebase-tools
+    ```
+2.  **Fazer Login**:
+    ```bash
+    firebase login
+    ```
+3.  **Inicializar o Projeto**:
+    No terminal, na raiz do projeto, corre:
+    ```bash
+    firebase init hosting
+    ```
+    - Seleciona o teu projeto existente.
+    - Diretório público: **`dist`**.
+    - Configurar como SPA (Single Page App): **`Yes`**.
+    - Sobrescrever `index.html`: **`No`**.
+4.  **Gerar o Build**:
+    ```bash
+    npm run build
+    ```
+5.  **Fazer o Deploy**:
+    ```bash
+    firebase deploy
+    ```
+    O Firebase dar-te-á um URL (ex: `https://teu-projeto.web.app`) onde a tua app estará disponível.
+
+### 5. Automatizar o Deploy com GitHub Actions
+
+Podes configurar o GitHub para fazer o deploy automático sempre que fizeres um `push` para a branch `main`:
+
+1.  **Obter a Chave de Serviço do Firebase**:
+    -   Vai à [Consola do Google Cloud](https://console.cloud.google.com/).
+    -   Seleciona o teu projeto Firebase.
+    -   Vai a **IAM & Admin** -> **Service Accounts**.
+    -   Cria uma nova conta de serviço ou usa a existente (ex: `firebase-adminsdk`).
+    -   Cria uma nova **Chave JSON** e faz o download.
+2.  **Configurar Segredos no GitHub**:
+    -   No teu repositório no GitHub, vai a **Settings** -> **Secrets and variables** -> **Actions**.
+    -   Adiciona um novo segredo chamado `FIREBASE_SERVICE_ACCOUNT_FINPORTAL` e cola o conteúdo do ficheiro JSON da chave.
+    -   Adiciona também as variáveis de ambiente do Firebase como segredos (ex: `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_PROJECT_ID`, etc.).
+3.  **Workflow**:
+    -   O ficheiro `.github/workflows/firebase-hosting-merge.yml` já está configurado para detetar estas variáveis e fazer o deploy automático para o Firebase Hosting.
 
 ---
 
