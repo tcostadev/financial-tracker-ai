@@ -35,7 +35,7 @@ export const Sidebar = ({ activeTab, setActiveTab, user, handleLogout }: Sidebar
           <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
             <Wallet className="text-white w-6 h-6" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-zinc-900">FinPortal</h1>
+          <h1 className="text-xl font-bold tracking-tight text-zinc-900">Financial Tracker</h1>
         </div>
 
         <nav className="space-y-1">

@@ -97,7 +97,7 @@ export const ReportsTab = ({ setActiveTab, expenses, categories }: ReportsTabPro
               <p className="text-zinc-500">Financial Year: {selectedYear}</p>
             </div>
             <div className="text-right">
-              <p className="font-bold text-xl text-indigo-600">FinPortal</p>
+              <p className="font-bold text-xl text-indigo-600">Financial Tracker</p>
               <p className="text-xs text-zinc-400">Generated on {format(new Date(), 'PPP')}</p>
             </div>
           </div>
@@ -207,7 +207,7 @@ export const ReportsTab = ({ setActiveTab, expenses, categories }: ReportsTabPro
 
         <div className="hidden print:block pt-12 border-t border-zinc-100">
           <p className="text-xs text-zinc-400 text-center italic">
-            This report is for informational purposes only. FinPortal © 2026
+            This report is for informational purposes only. Financial Tracker © 2026
           </p>
         </div>
       </div>

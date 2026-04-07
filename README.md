@@ -1,4 +1,4 @@
-# FinPortal - Expense & Income Tracker
+# Financial Tracker - Expense & Income Tracker
 
 Um portal financeiro moderno para gerir as tuas despesas, rendimentos e orçamentos mensais.
 

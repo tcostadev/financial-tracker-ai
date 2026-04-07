@@ -421,17 +421,116 @@ export default function App() {
 
   if (!user) {
     return (
-      <div className="h-screen flex items-center justify-center bg-zinc-50 p-4">
-        <Card className="max-w-md w-full text-center p-12">
-          <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Wallet className="text-white w-8 h-8" />
+      <div className="h-screen flex flex-col lg:flex-row bg-zinc-50 overflow-hidden">
+        {/* Left Side: Marketing/Info */}
+        <div className="hidden lg:flex flex-1 bg-indigo-600 p-12 flex-col justify-between relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-400/20 rounded-full -ml-20 -mb-20 blur-3xl" />
+          
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-12">
+              <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20">
+                <Wallet className="text-white w-7 h-7" />
+              </div>
+              <h1 className="text-2xl font-bold text-white tracking-tight">Financial Tracker</h1>
+            </div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="max-w-xl"
+            >
+              <h2 className="text-5xl font-bold text-white leading-tight mb-6">
+                Take control of your <span className="text-indigo-200">financial future</span> today.
+              </h2>
+              <p className="text-indigo-100 text-xl leading-relaxed mb-12">
+                The most intuitive way to track expenses, manage budgets, and visualize your financial growth in real-time.
+              </p>
+
+              <div className="grid grid-cols-2 gap-8">
+                {[
+                  { icon: TrendingUp, title: 'Income Tracking', desc: 'Monitor all your revenue sources in one place.' },
+                  { icon: Receipt, title: 'Expense Control', desc: 'Categorize and analyze your spending habits.' },
+                  { icon: PieChartIcon, title: 'Budget Planning', desc: 'Set monthly limits and stay on track.' },
+                  { icon: LayoutDashboard, title: 'Smart Insights', desc: 'Visual reports to help you save more.' },
+                ].map((feature, idx) => (
+                  <motion.div 
+                    key={feature.title}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + (idx * 0.1) }}
+                    className="flex gap-4"
+                  >
+                    <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center shrink-0 border border-white/10">
+                      <feature.icon className="text-indigo-200 w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-semibold mb-1">{feature.title}</h3>
+                      <p className="text-indigo-200/70 text-sm leading-snug">{feature.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
           </div>
-          <h1 className="text-3xl font-bold text-zinc-900 mb-2">Welcome to FinPortal</h1>
-          <p className="text-zinc-500 mb-8">Manage your expenses and categories with ease. Sign in to get started.</p>
-          <Button onClick={handleLogin} className="w-full py-4 text-lg">
-            Sign in with Google
-          </Button>
-        </Card>
+
+          <div className="relative z-10 text-indigo-200/50 text-sm">
+            © 2026 Financial Tracker. All rights reserved.
+          </div>
+        </div>
+
+        {/* Right Side: Login Form */}
+        <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-md w-full"
+          >
+            <div className="lg:hidden flex items-center justify-center gap-3 mb-12">
+              <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
+                <Wallet className="text-white w-7 h-7" />
+              </div>
+              <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Financial Tracker</h1>
+            </div>
+
+            <Card className="p-8 lg:p-12 border-zinc-200 shadow-xl shadow-zinc-200/50">
+              <div className="text-center mb-10">
+                <h3 className="text-2xl font-bold text-zinc-900 mb-2">Welcome Back</h3>
+                <p className="text-zinc-500">Sign in to access your dashboard and manage your finances.</p>
+              </div>
+
+              <Button 
+                onClick={handleLogin} 
+                className="w-full py-4 text-lg flex items-center justify-center gap-3 bg-white hover:bg-zinc-50 text-zinc-900 border border-zinc-200 shadow-sm transition-all active:scale-[0.98]"
+              >
+                <img 
+                  src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
+                  alt="Google" 
+                  className="w-6 h-6"
+                />
+                Continue with Google
+              </Button>
+
+              <div className="mt-10 pt-10 border-t border-zinc-100">
+                <div className="flex items-center gap-4 text-sm text-zinc-400 mb-6">
+                  <div className="h-px bg-zinc-100 flex-1" />
+                  <span>Trusted by thousands</span>
+                  <div className="h-px bg-zinc-100 flex-1" />
+                </div>
+                <div className="flex justify-center gap-8 opacity-40 grayscale">
+                  <div className="font-bold text-xl">FINANCE</div>
+                  <div className="font-bold text-xl">SECURE</div>
+                  <div className="font-bold text-xl">TRUST</div>
+                </div>
+              </div>
+            </Card>
+            
+            <p className="text-center mt-8 text-zinc-400 text-sm">
+              By signing in, you agree to our Terms of Service and Privacy Policy.
+            </p>
+          </motion.div>
+        </div>
       </div>
     );
   }
