@@ -110,6 +110,7 @@ Podes configurar o GitHub para fazer o deploy automático sempre que fizeres um 
     -   Adiciona também as variáveis de ambiente do Firebase como segredos (ex: `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_PROJECT_ID`, etc.).
 3.  **Workflow**:
     -   O ficheiro `.github/workflows/firebase-hosting-merge.yml` já está configurado para detetar estas variáveis e fazer o deploy automático para o Firebase Hosting.
+    -   Certifica-te de que os ficheiros `firebase.json` e `.firebaserc` estão na raiz do teu repositório (já foram criados para ti).
 
 ---
 
