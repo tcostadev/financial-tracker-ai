@@ -78,9 +78,9 @@ export const Dashboard = ({
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="relative overflow-hidden">
-          <div className="flex justify-between items-start mb-4">
+          <div className="flex justify-between items-center mb-4">
             <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Total Balance</p>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <button 
                 onClick={() => setShowBalance(!showBalance)}
                 className="p-1.5 hover:bg-zinc-100 rounded-md transition-colors text-zinc-400 hover:text-zinc-600"
@@ -100,9 +100,9 @@ export const Dashboard = ({
         </Card>
 
         <Card>
-          <div className="flex justify-between items-start mb-4">
+          <div className="flex justify-between items-center mb-4">
             <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Monthly Income</p>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <button 
                 onClick={() => setShowIncome(!showIncome)}
                 className="p-1.5 hover:bg-zinc-100 rounded-md transition-colors text-zinc-400 hover:text-zinc-600"
@@ -122,9 +122,9 @@ export const Dashboard = ({
         </Card>
 
         <Card>
-          <div className="flex justify-between items-start mb-4">
+          <div className="flex justify-between items-center mb-4">
             <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Monthly Expenses</p>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <button 
                 onClick={() => setShowExpenses(!showExpenses)}
                 className="p-1.5 hover:bg-zinc-100 rounded-md transition-colors text-zinc-400 hover:text-zinc-600"
@@ -144,9 +144,9 @@ export const Dashboard = ({
         </Card>
 
         <Card>
-          <div className="flex justify-between items-start mb-4">
+          <div className="flex justify-between items-center mb-4">
             <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Budget Progress</p>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <button 
                 onClick={() => setShowBudget(!showBudget)}
                 className="p-1.5 hover:bg-zinc-100 rounded-md transition-colors text-zinc-400 hover:text-zinc-600"

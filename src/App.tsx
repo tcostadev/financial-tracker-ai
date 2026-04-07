@@ -51,6 +51,7 @@ import { ReportsTab } from './components/ReportsTab';
 import { ExpenseModal } from './components/modals/ExpenseModal';
 import { CategoryModal } from './components/modals/CategoryModal';
 import { IncomeModal } from './components/modals/IncomeModal';
+import { ConfirmModal } from './components/modals/ConfirmModal';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -67,6 +68,19 @@ export default function App() {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [editingIncome, setEditingIncome] = useState<Income | null>(null);
+
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    variant?: 'danger' | 'warning';
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
+  });
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -201,12 +215,18 @@ export default function App() {
   };
 
   const handleDeleteExpense = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this expense?')) return;
-    try {
-      await deleteDoc(doc(db, 'expenses', id));
-    } catch (error) {
-      console.error("Error deleting expense", error);
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Expense',
+      message: 'Are you sure you want to delete this expense? This action cannot be undone.',
+      onConfirm: async () => {
+        try {
+          await deleteDoc(doc(db, 'expenses', id));
+        } catch (error) {
+          console.error("Error deleting expense", error);
+        }
+      }
+    });
   };
 
   const openEditExpense = (expense: Expense) => {
@@ -255,16 +275,28 @@ export default function App() {
   const handleDeleteCategory = async (id: string) => {
     const hasExpenses = expenses.some(e => e.categoryId === id);
     if (hasExpenses) {
-      alert("Cannot delete category that has expenses. Please reassign or delete the expenses first.");
+      setConfirmModal({
+        isOpen: true,
+        title: 'Cannot Delete Category',
+        message: 'Cannot delete category that has expenses. Please reassign or delete the expenses first.',
+        onConfirm: () => {},
+        variant: 'warning'
+      });
       return;
     }
 
-    if (!window.confirm('Are you sure you want to delete this category?')) return;
-    try {
-      await deleteDoc(doc(db, 'categories', id));
-    } catch (error) {
-      console.error("Error deleting category", error);
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Category',
+      message: 'Are you sure you want to delete this category? This action cannot be undone.',
+      onConfirm: async () => {
+        try {
+          await deleteDoc(doc(db, 'categories', id));
+        } catch (error) {
+          console.error("Error deleting category", error);
+        }
+      }
+    });
   };
 
   const openEditCategory = (category: Category) => {
@@ -311,12 +343,18 @@ export default function App() {
   };
 
   const handleDeleteIncome = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this income record?')) return;
-    try {
-      await deleteDoc(doc(db, 'incomes', id));
-    } catch (error) {
-      console.error("Error deleting income", error);
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Income Record',
+      message: 'Are you sure you want to delete this income record? This action cannot be undone.',
+      onConfirm: async () => {
+        try {
+          await deleteDoc(doc(db, 'incomes', id));
+        } catch (error) {
+          console.error("Error deleting income", error);
+        }
+      }
+    });
   };
 
   const openEditIncome = (income: Income) => {
@@ -545,6 +583,17 @@ export default function App() {
         incomeForm={incomeForm}
         setIncomeForm={setIncomeForm}
         handleSaveIncome={handleSaveIncome}
+      />
+
+      <ConfirmModal 
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmModal.onConfirm}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        variant={confirmModal.variant}
+        confirmText={confirmModal.variant === 'warning' ? 'OK' : 'Delete'}
+        cancelText={confirmModal.variant === 'warning' ? '' : 'Cancel'}
       />
     </div>
   );
