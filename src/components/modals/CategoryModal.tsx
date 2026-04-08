@@ -14,6 +14,7 @@ interface CategoryModalProps {
   categoryForm: any;
   setCategoryForm: (form: any) => void;
   handleSaveCategory: (e: React.FormEvent) => void;
+  isSaving?: boolean;
 }
 
 export const CategoryModal = ({
@@ -22,7 +23,8 @@ export const CategoryModal = ({
   editingCategory,
   categoryForm,
   setCategoryForm,
-  handleSaveCategory
+  handleSaveCategory,
+  isSaving
 }: CategoryModalProps) => {
   return (
     <Modal 
@@ -31,6 +33,7 @@ export const CategoryModal = ({
       title={editingCategory ? "Edit Category" : "Add New Category"}
     >
       <form onSubmit={handleSaveCategory} className="space-y-6">
+        {/* ... existing fields ... */}
         <div className="space-y-2">
           <label className="text-sm font-semibold text-zinc-700">Category Name</label>
           <Input 
@@ -67,6 +70,7 @@ export const CategoryModal = ({
               <button
                 key={iconName}
                 type="button"
+                disabled={isSaving}
                 onClick={() => setCategoryForm({...categoryForm, icon: iconName})}
                 className={cn(
                   "p-3 rounded-xl border-2 transition-all flex items-center justify-center",
@@ -85,6 +89,7 @@ export const CategoryModal = ({
               <button
                 key={color}
                 type="button"
+                disabled={isSaving}
                 onClick={() => setCategoryForm({...categoryForm, color: color})}
                 className={cn(
                   "w-8 h-8 rounded-full border-2 transition-all",
@@ -99,10 +104,10 @@ export const CategoryModal = ({
         </div>
 
         <div className="pt-4 flex gap-3">
-          <Button type="button" variant="secondary" className="flex-1" onClick={onClose}>
+          <Button type="button" variant="secondary" className="flex-1" onClick={onClose} disabled={isSaving}>
             Cancel
           </Button>
-          <Button type="submit" className="flex-1">
+          <Button type="submit" className="flex-1" isLoading={isSaving}>
             {editingCategory ? "Update Category" : "Save Category"}
           </Button>
         </div>

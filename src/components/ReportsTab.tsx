@@ -103,39 +103,39 @@ export const ReportsTab = ({ setActiveTab, expenses, categories }: ReportsTabPro
           </div>
         </div>
 
-        <Card className="p-0 overflow-x-auto border-none shadow-none sm:shadow-soft sm:border sm:border-zinc-100 print:shadow-none print:border-none">
+        <Card className="p-0 overflow-x-auto border-none shadow-premium bg-white print:shadow-none print:border-none">
           <table className="w-full text-left border-collapse min-w-[1000px] print:min-w-full">
             <thead>
-              <tr className="bg-zinc-50/50 border-b border-zinc-100 print:bg-transparent">
-                <th className="px-4 py-4 text-xs font-bold text-zinc-500 uppercase tracking-wider sticky left-0 bg-zinc-50/50 z-10 print:bg-transparent">Category</th>
+              <tr className="bg-slate-50/50 border-b border-slate-100 print:bg-transparent">
+                <th className="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest sticky left-0 bg-slate-50/50 z-10 print:bg-transparent">Category</th>
                 {MONTHS.map(month => (
-                  <th key={month} className="px-2 py-4 text-xs font-bold text-zinc-500 uppercase tracking-wider text-center">{month}</th>
+                  <th key={month} className="px-2 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">{month}</th>
                 ))}
-                <th className="px-4 py-4 text-xs font-bold text-zinc-900 uppercase tracking-wider text-right bg-zinc-50/50 print:bg-transparent">Total</th>
+                <th className="px-4 py-4 text-[10px] font-bold text-slate-900 uppercase tracking-widest text-right bg-slate-50/50 print:bg-transparent">Total</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100">
+            <tbody className="divide-y divide-slate-100">
               {categories.map(category => {
                 const rowTotal = reportData[category.id].reduce((sum, val) => sum + val, 0);
                 if (rowTotal === 0) return null;
 
                 return (
-                  <tr key={category.id} className="hover:bg-zinc-50 transition-colors print:hover:bg-transparent">
+                  <tr key={category.id} className="hover:bg-slate-50 transition-colors print:hover:bg-transparent">
                     <td className="px-4 py-4 sticky left-0 bg-white z-10 print:bg-transparent">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: category.color }} />
-                        <span className="text-sm font-medium text-zinc-900">{category.name}</span>
+                        <span className="text-sm font-semibold text-slate-900">{category.name}</span>
                       </div>
                     </td>
                     {reportData[category.id].map((amount, i) => (
                       <td key={i} className={cn(
-                        "px-2 py-4 text-center text-sm",
-                        amount > 0 ? "text-zinc-900" : "text-zinc-300"
+                        "px-2 py-4 text-center text-sm font-mono",
+                        amount > 0 ? "text-slate-900" : "text-slate-300"
                       )}>
                         {amount > 0 ? `$${amount.toFixed(0)}` : '-'}
                       </td>
                     ))}
-                    <td className="px-4 py-4 text-right text-sm font-bold text-zinc-900 bg-zinc-50/30 print:bg-transparent">
+                    <td className="px-4 py-4 text-right text-sm font-bold text-slate-900 bg-slate-50/30 print:bg-transparent font-mono">
                       ${rowTotal.toLocaleString(undefined, { minimumFractionDigits: 0 })}
                     </td>
                   </tr>
@@ -143,14 +143,14 @@ export const ReportsTab = ({ setActiveTab, expenses, categories }: ReportsTabPro
               })}
             </tbody>
             <tfoot>
-              <tr className="bg-zinc-900 text-white print:bg-zinc-100 print:text-zinc-900">
-                <td className="px-4 py-4 font-bold text-sm sticky left-0 bg-zinc-900 print:bg-zinc-100">Monthly Total</td>
+              <tr className="bg-slate-900 text-white print:bg-slate-100 print:text-slate-900">
+                <td className="px-4 py-4 font-bold text-xs uppercase tracking-widest sticky left-0 bg-slate-900 print:bg-slate-100">Monthly Total</td>
                 {monthTotals.map((total, i) => (
-                  <td key={i} className="px-2 py-4 text-center text-sm font-bold">
+                  <td key={i} className="px-2 py-4 text-center text-sm font-bold font-mono">
                     ${total.toFixed(0)}
                   </td>
                 ))}
-                <td className="px-4 py-4 text-right text-sm font-black bg-indigo-600 print:bg-zinc-200">
+                <td className="px-4 py-4 text-right text-sm font-black bg-indigo-600 print:bg-slate-200 font-mono">
                   ${grandTotal.toLocaleString()}
                 </td>
               </tr>

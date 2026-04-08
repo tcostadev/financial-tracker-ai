@@ -11,6 +11,7 @@ interface IncomeModalProps {
   incomeForm: any;
   setIncomeForm: (form: any) => void;
   handleSaveIncome: (e: React.FormEvent) => void;
+  isSaving?: boolean;
 }
 
 export const IncomeModal = ({
@@ -19,7 +20,8 @@ export const IncomeModal = ({
   editingIncome,
   incomeForm,
   setIncomeForm,
-  handleSaveIncome
+  handleSaveIncome,
+  isSaving
 }: IncomeModalProps) => {
   return (
     <Modal 
@@ -28,6 +30,7 @@ export const IncomeModal = ({
       title={editingIncome ? "Edit Income" : "Add New Income"}
     >
       <form onSubmit={handleSaveIncome} className="space-y-6">
+        {/* ... existing fields ... */}
         <div className="space-y-2">
           <label className="text-sm font-semibold text-zinc-700">Amount</label>
           <div className="relative">
@@ -83,10 +86,10 @@ export const IncomeModal = ({
         </div>
 
         <div className="pt-4 flex gap-3">
-          <Button type="button" variant="secondary" className="flex-1" onClick={onClose}>
+          <Button type="button" variant="secondary" className="flex-1" onClick={onClose} disabled={isSaving}>
             Cancel
           </Button>
-          <Button type="submit" className="flex-1">
+          <Button type="submit" className="flex-1" isLoading={isSaving}>
             {editingIncome ? "Update Income" : "Save Income"}
           </Button>
         </div>

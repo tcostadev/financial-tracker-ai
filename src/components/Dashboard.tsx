@@ -77,103 +77,109 @@ export const Dashboard = ({
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="relative overflow-hidden">
+        <Card className="relative overflow-hidden border-none shadow-premium bg-white group hover:translate-y-[-2px] transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
-            <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Total Balance</p>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Balance</p>
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => setShowBalance(!showBalance)}
-                className="p-1.5 hover:bg-zinc-100 rounded-md transition-colors text-zinc-400 hover:text-zinc-600"
+                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors text-slate-400 hover:text-slate-600"
               >
                 {showBalance ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
-              <div className="p-2 bg-indigo-50 rounded-lg">
+              <div className="p-2 bg-indigo-50 rounded-xl">
                 <Wallet className="w-5 h-5 text-indigo-600" />
               </div>
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-zinc-900">{showBalance ? formatValue(totalBalance) : mask}</h3>
-          <div className="mt-4 flex items-center gap-2 text-emerald-600 text-sm font-medium">
-            <ArrowUpRight className="w-4 h-4" />
-            <span>Net Worth</span>
+          <h3 className="text-3xl font-bold text-slate-900 font-mono tracking-tighter">
+            {showBalance ? formatValue(totalBalance) : mask}
+          </h3>
+          <div className="mt-4 flex items-center gap-2 text-emerald-600 text-xs font-bold bg-emerald-50 w-fit px-2 py-1 rounded-lg">
+            <ArrowUpRight className="w-3 h-3" />
+            <span>NET WORTH</span>
           </div>
         </Card>
 
-        <Card>
+        <Card className="border-none shadow-premium bg-white group hover:translate-y-[-2px] transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
-            <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Monthly Income</p>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Monthly Income</p>
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => setShowIncome(!showIncome)}
-                className="p-1.5 hover:bg-zinc-100 rounded-md transition-colors text-zinc-400 hover:text-zinc-600"
+                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors text-slate-400 hover:text-slate-600"
               >
                 {showIncome ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
-              <div className="p-2 bg-emerald-50 rounded-lg">
+              <div className="p-2 bg-emerald-50 rounded-xl">
                 <TrendingUp className="w-5 h-5 text-emerald-600" />
               </div>
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-zinc-900">{showIncome ? formatValue(totalIncomeThisMonth) : mask}</h3>
-          <div className="mt-4 flex items-center gap-2 text-emerald-600 text-sm font-medium">
-            <ArrowUpRight className="w-4 h-4" />
-            <span>Total for {format(new Date(), 'MMMM')}</span>
+          <h3 className="text-3xl font-bold text-slate-900 font-mono tracking-tighter">
+            {showIncome ? formatValue(totalIncomeThisMonth) : mask}
+          </h3>
+          <div className="mt-4 flex items-center gap-2 text-emerald-600 text-xs font-bold bg-emerald-50 w-fit px-2 py-1 rounded-lg">
+            <ArrowUpRight className="w-3 h-3" />
+            <span>{format(new Date(), 'MMMM').toUpperCase()}</span>
           </div>
         </Card>
 
-        <Card>
+        <Card className="border-none shadow-premium bg-white group hover:translate-y-[-2px] transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
-            <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Monthly Expenses</p>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Monthly Expenses</p>
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => setShowExpenses(!showExpenses)}
-                className="p-1.5 hover:bg-zinc-100 rounded-md transition-colors text-zinc-400 hover:text-zinc-600"
+                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors text-slate-400 hover:text-slate-600"
               >
                 {showExpenses ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
-              <div className="p-2 bg-rose-50 rounded-lg">
+              <div className="p-2 bg-rose-50 rounded-xl">
                 <TrendingDown className="w-5 h-5 text-rose-600" />
               </div>
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-zinc-900">{showExpenses ? formatValue(totalSpentThisMonth) : mask}</h3>
-          <div className="mt-4 flex items-center gap-2 text-rose-600 text-sm font-medium">
-            <ArrowDownRight className="w-4 h-4" />
-            <span>Total for {format(new Date(), 'MMMM')}</span>
+          <h3 className="text-3xl font-bold text-slate-900 font-mono tracking-tighter">
+            {showExpenses ? formatValue(totalSpentThisMonth) : mask}
+          </h3>
+          <div className="mt-4 flex items-center gap-2 text-rose-600 text-xs font-bold bg-rose-50 w-fit px-2 py-1 rounded-lg">
+            <ArrowDownRight className="w-3 h-3" />
+            <span>{format(new Date(), 'MMMM').toUpperCase()}</span>
           </div>
         </Card>
 
-        <Card>
+        <Card className="border-none shadow-premium bg-white group hover:translate-y-[-2px] transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
-            <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Budget Progress</p>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Budget Progress</p>
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => setShowBudget(!showBudget)}
-                className="p-1.5 hover:bg-zinc-100 rounded-md transition-colors text-zinc-400 hover:text-zinc-600"
+                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors text-slate-400 hover:text-slate-600"
               >
                 {showBudget ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
-              <div className="p-2 bg-amber-50 rounded-lg">
+              <div className="p-2 bg-amber-50 rounded-xl">
                 <TrendingUp className="w-5 h-5 text-amber-600" />
               </div>
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-zinc-900">{budgetProgress.toFixed(1)}%</h3>
+          <h3 className="text-3xl font-bold text-slate-900 font-mono tracking-tighter">{budgetProgress.toFixed(1)}%</h3>
           <div className="mt-4 space-y-2">
-            <div className="w-full h-2 bg-zinc-100 rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.min(budgetProgress, 100)}%` }}
                 className={cn(
                   "h-full transition-all duration-1000",
-                  budgetProgress > 90 ? "bg-red-500" : "bg-indigo-600"
+                  budgetProgress > 90 ? "bg-rose-500" : "bg-indigo-500"
                 )}
               />
             </div>
-            <p className="text-xs text-zinc-500 text-right">
+            <p className="text-[10px] font-bold text-slate-400 text-right uppercase tracking-wider">
               {showBudget 
-                ? `$${totalSpentThisMonth.toLocaleString()} of $${monthlyBudget.toLocaleString()}` 
-                : '•••••• of ••••••'}
+                ? `$${totalSpentThisMonth.toLocaleString()} / $${monthlyBudget.toLocaleString()}` 
+                : '•••••• / ••••••'}
             </p>
           </div>
         </Card>

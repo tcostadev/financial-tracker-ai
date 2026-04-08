@@ -67,45 +67,45 @@ export const ExpenseTab = ({
         </div>
       </div>
 
-      <Card className="p-0 overflow-hidden">
+      <Card className="p-0 overflow-hidden border-none shadow-premium bg-white">
         {/* Desktop Table */}
         <div className="hidden md:block">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-zinc-50/50 border-b border-zinc-100">
-                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Transaction</th>
-                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Category</th>
-                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider text-right">Amount</th>
-                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider"></th>
+              <tr className="bg-slate-50/50 border-b border-slate-100">
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Transaction</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Category</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Amount</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100">
+            <tbody className="divide-y divide-slate-100">
               {filteredExpenses.map((expense) => {
                 const category = categories.find(c => c.id === expense.categoryId);
                 return (
-                  <tr key={expense.id} className="hover:bg-zinc-50 transition-colors group">
+                  <tr key={expense.id} className="hover:bg-slate-50 transition-colors group">
                     <td className="px-6 py-4">
-                      <p className="font-medium text-zinc-900">{expense.description}</p>
+                      <p className="font-semibold text-slate-900">{expense.description}</p>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: category?.color || '#ccc' }} />
-                        <span className="text-sm text-zinc-600">{category?.name || 'Uncategorized'}</span>
+                        <span className="text-sm font-medium text-slate-600">{category?.name || 'Uncategorized'}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm text-zinc-500">{format(parseISO(expense.date), 'MMM dd, yyyy')}</span>
+                      <span className="text-sm font-medium text-slate-400">{format(parseISO(expense.date), 'MMM dd, yyyy')}</span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <span className="font-bold text-zinc-900">-${expense.amount.toFixed(2)}</span>
+                      <span className="font-bold text-slate-900 font-mono">-${expense.amount.toFixed(2)}</span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => openEditExpense(expense)} className="p-2 text-zinc-400 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-all">
+                        <button onClick={() => openEditExpense(expense)} className="p-2 text-slate-400 hover:text-indigo-600 rounded-xl hover:bg-indigo-50 transition-all">
                           <Edit2 className="w-4 h-4" />
                         </button>
-                        <button onClick={() => handleDeleteExpense(expense.id)} className="p-2 text-zinc-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-all">
+                        <button onClick={() => handleDeleteExpense(expense.id)} className="p-2 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 transition-all">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>

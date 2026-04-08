@@ -12,6 +12,7 @@ interface ExpenseModalProps {
   setExpenseForm: (form: any) => void;
   handleSaveExpense: (e: React.FormEvent) => void;
   categories: Category[];
+  isSaving?: boolean;
 }
 
 export const ExpenseModal = ({
@@ -21,7 +22,8 @@ export const ExpenseModal = ({
   expenseForm,
   setExpenseForm,
   handleSaveExpense,
-  categories
+  categories,
+  isSaving
 }: ExpenseModalProps) => {
   return (
     <Modal 
@@ -30,6 +32,7 @@ export const ExpenseModal = ({
       title={editingExpense ? "Edit Expense" : "Add New Expense"}
     >
       <form onSubmit={handleSaveExpense} className="space-y-6">
+        {/* ... existing fields ... */}
         <div className="space-y-2">
           <label className="text-sm font-semibold text-zinc-700">Amount</label>
           <div className="relative">
@@ -84,10 +87,10 @@ export const ExpenseModal = ({
         </div>
 
         <div className="pt-4 flex gap-3">
-          <Button type="button" variant="secondary" className="flex-1" onClick={onClose}>
+          <Button type="button" variant="secondary" className="flex-1" onClick={onClose} disabled={isSaving}>
             Cancel
           </Button>
-          <Button type="submit" className="flex-1">
+          <Button type="submit" className="flex-1" isLoading={isSaving}>
             {editingExpense ? "Update Expense" : "Save Expense"}
           </Button>
         </div>

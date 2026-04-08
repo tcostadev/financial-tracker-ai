@@ -31,35 +31,34 @@ export const CategoryTab = ({
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
     >
       {categories.map((category) => (
-        <Card key={category.id} className="relative group">
-          <div className="flex items-center justify-between mb-4">
+        <Card key={category.id} className="relative group border-none shadow-premium bg-white hover:translate-y-[-2px] transition-all duration-300">
+          <div className="flex items-center justify-between mb-6">
             <div 
-              className="w-12 h-12 rounded-2xl flex items-center justify-center"
-              style={{ backgroundColor: `${category.color}20`, color: category.color }}
+              className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm"
+              style={{ backgroundColor: `${category.color}15`, color: category.color }}
             >
               {IconMap[category.icon]}
             </div>
             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button onClick={() => openEditCategory(category)} className="p-2 text-zinc-400 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">
+              <button onClick={() => openEditCategory(category)} className="p-2 text-slate-400 hover:text-indigo-600 rounded-xl hover:bg-indigo-50 transition-all">
                 <Edit2 className="w-4 h-4" />
               </button>
-              <button onClick={() => handleDeleteCategory(category.id)} className="p-2 text-zinc-400 hover:text-red-600 rounded-lg hover:bg-red-50">
+              <button onClick={() => handleDeleteCategory(category.id)} className="p-2 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 transition-all">
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
           </div>
-          <h4 className="text-lg font-bold text-zinc-900 mb-1">{category.name}</h4>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-zinc-500">Monthly Budget</span>
-            <span className="font-semibold text-zinc-900">${category.budget?.toLocaleString() || '0'}</span>
+          <h4 className="text-xl font-bold text-slate-900 mb-1">{category.name}</h4>
+          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-slate-400">
+            <span>Monthly Budget</span>
+            <span className="text-slate-900 font-mono">${category.budget?.toLocaleString() || '0'}</span>
           </div>
-          <div className="mt-4 w-full h-1.5 bg-zinc-100 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-indigo-600" 
-              style={{ 
-                backgroundColor: category.color,
-                width: `${Math.min((expenses.filter(e => e.categoryId === category.id).reduce((sum, e) => sum + e.amount, 0) / (category.budget || 1)) * 100, 100)}%` 
-              }} 
+          <div className="mt-4 w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: `${Math.min((expenses.filter(e => e.categoryId === category.id).reduce((sum, e) => sum + e.amount, 0) / (category.budget || 1)) * 100, 100)}%` }}
+              className="h-full transition-all duration-1000" 
+              style={{ backgroundColor: category.color }} 
             />
           </div>
         </Card>
@@ -70,12 +69,12 @@ export const CategoryTab = ({
           setCategoryForm({ name: '', icon: AVAILABLE_ICONS[0], color: AVAILABLE_COLORS[0], budget: '' }); 
           setIsAddCategoryModalOpen(true); 
         }}
-        className="border-2 border-dashed border-zinc-200 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 text-zinc-500 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all group"
+        className="border-2 border-dashed border-slate-200 rounded-3xl p-8 flex flex-col items-center justify-center gap-4 text-slate-400 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all group"
       >
-        <div className="w-12 h-12 rounded-full bg-zinc-50 flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
+        <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
           <Plus className="w-6 h-6" />
         </div>
-        <span className="font-medium">Add New Category</span>
+        <span className="font-bold uppercase tracking-widest text-xs">Add New Category</span>
       </button>
     </motion.div>
   );

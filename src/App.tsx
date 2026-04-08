@@ -11,7 +11,7 @@ import {
 import { format, subMonths, startOfMonth, endOfMonth, isWithinInterval, parseISO } from 'date-fns';
 import { motion } from 'motion/react';
 import { cn } from './lib/utils';
-import { auth, db } from './firebase';
+import { auth, db, handleFirestoreError, OperationType } from './firebase';
 import { 
   signInWithPopup, 
   GoogleAuthProvider, 
@@ -68,6 +68,7 @@ export default function App() {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [editingIncome, setEditingIncome] = useState<Income | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
@@ -145,16 +146,22 @@ export default function App() {
     const unsubExpenses = onSnapshot(qExpenses, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Expense));
       setExpenses(data);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, 'expenses');
     });
 
     const unsubCategories = onSnapshot(qCategories, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
       setCategories(data);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, 'categories');
     });
 
     const unsubIncomes = onSnapshot(qIncomes, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Income));
       setIncomes(data);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, 'incomes');
     });
 
     return () => {
@@ -195,6 +202,7 @@ export default function App() {
       uid: user.uid
     };
 
+    setIsSaving(true);
     try {
       if (editingExpense) {
         await updateDoc(doc(db, 'expenses', editingExpense.id), data);
@@ -210,7 +218,9 @@ export default function App() {
         date: format(new Date(), 'yyyy-MM-dd')
       });
     } catch (error) {
-      console.error("Error saving expense", error);
+      handleFirestoreError(error, editingExpense ? OperationType.UPDATE : OperationType.CREATE, 'expenses');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -253,6 +263,7 @@ export default function App() {
       uid: user.uid
     };
 
+    setIsSaving(true);
     try {
       if (editingCategory) {
         await updateDoc(doc(db, 'categories', editingCategory.id), data);
@@ -268,7 +279,9 @@ export default function App() {
         budget: ''
       });
     } catch (error) {
-      console.error("Error saving category", error);
+      handleFirestoreError(error, editingCategory ? OperationType.UPDATE : OperationType.CREATE, 'categories');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -323,6 +336,7 @@ export default function App() {
       uid: user.uid
     };
 
+    setIsSaving(true);
     try {
       if (editingIncome) {
         await updateDoc(doc(db, 'incomes', editingIncome.id), data);
@@ -338,7 +352,9 @@ export default function App() {
         date: format(new Date(), 'yyyy-MM-dd')
       });
     } catch (error) {
-      console.error("Error saving income", error);
+      handleFirestoreError(error, editingIncome ? OperationType.UPDATE : OperationType.CREATE, 'incomes');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -413,61 +429,61 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-zinc-50">
-        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+      <div className="h-screen flex items-center justify-center bg-slate-50">
+        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin shadow-premium" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="h-screen flex flex-col lg:flex-row bg-zinc-50 overflow-hidden">
+      <div className="h-screen flex flex-col lg:flex-row bg-slate-50 overflow-hidden">
         {/* Left Side: Marketing/Info */}
-        <div className="hidden lg:flex flex-1 bg-indigo-600 p-12 flex-col justify-between relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-400/20 rounded-full -ml-20 -mb-20 blur-3xl" />
+        <div className="hidden lg:flex flex-1 bg-zinc-950 p-16 flex-col justify-between relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full -mr-40 -mt-40 blur-[100px]" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full -ml-40 -mb-40 blur-[100px]" />
           
           <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-12">
-              <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20">
-                <Wallet className="text-white w-7 h-7" />
+            <div className="flex items-center gap-4 mb-16">
+              <div className="w-14 h-14 bg-white/5 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/10 shadow-2xl">
+                <Wallet className="text-white w-8 h-8" />
               </div>
-              <h1 className="text-2xl font-bold text-white tracking-tight">Financial Tracker</h1>
+              <h1 className="text-3xl font-bold text-white tracking-tight">Financial <span className="text-indigo-500">Tracker</span></h1>
             </div>
 
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
               className="max-w-xl"
             >
-              <h2 className="text-5xl font-bold text-white leading-tight mb-6">
-                Take control of your <span className="text-indigo-200">financial future</span> today.
+              <h2 className="text-6xl font-bold text-white leading-[1.1] mb-8 tracking-tight">
+                Master your money with <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400">precision.</span>
               </h2>
-              <p className="text-indigo-100 text-xl leading-relaxed mb-12">
-                The most intuitive way to track expenses, manage budgets, and visualize your financial growth in real-time.
+              <p className="text-zinc-400 text-xl leading-relaxed mb-16 font-medium">
+                The ultimate financial companion for modern professionals. Track, analyze, and grow your wealth with beautiful, data-driven insights.
               </p>
 
-              <div className="grid grid-cols-2 gap-8">
+              <div className="grid grid-cols-2 gap-10">
                 {[
-                  { icon: TrendingUp, title: 'Income Tracking', desc: 'Monitor all your revenue sources in one place.' },
-                  { icon: Receipt, title: 'Expense Control', desc: 'Categorize and analyze your spending habits.' },
-                  { icon: PieChartIcon, title: 'Budget Planning', desc: 'Set monthly limits and stay on track.' },
-                  { icon: LayoutDashboard, title: 'Smart Insights', desc: 'Visual reports to help you save more.' },
+                  { icon: TrendingUp, title: 'Income Tracking', desc: 'Monitor every revenue stream with ease.' },
+                  { icon: Receipt, title: 'Expense Control', desc: 'Smarter categorization for better saving.' },
+                  { icon: PieChartIcon, title: 'Budget Planning', desc: 'Set goals and watch your progress.' },
+                  { icon: LayoutDashboard, title: 'Smart Insights', desc: 'AI-powered financial health reports.' },
                 ].map((feature, idx) => (
                   <motion.div 
                     key={feature.title}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + (idx * 0.1) }}
-                    className="flex gap-4"
+                    transition={{ delay: 0.4 + (idx * 0.1) }}
+                    className="flex gap-5"
                   >
-                    <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center shrink-0 border border-white/10">
-                      <feature.icon className="text-indigo-200 w-5 h-5" />
+                    <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center shrink-0 border border-white/10 shadow-lg">
+                      <feature.icon className="text-indigo-400 w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="text-white font-semibold mb-1">{feature.title}</h3>
-                      <p className="text-indigo-200/70 text-sm leading-snug">{feature.desc}</p>
+                      <h3 className="text-white font-bold text-lg mb-1">{feature.title}</h3>
+                      <p className="text-zinc-500 text-sm leading-relaxed">{feature.desc}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -475,59 +491,61 @@ export default function App() {
             </motion.div>
           </div>
 
-          <div className="relative z-10 text-indigo-200/50 text-sm">
-            © 2026 Financial Tracker. All rights reserved.
+          <div className="relative z-10 text-zinc-600 text-sm font-medium">
+            © 2026 Financial Tracker. Built for the future of finance.
           </div>
         </div>
 
         {/* Right Side: Login Form */}
-        <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+        <div className="flex-1 flex items-center justify-center p-8 lg:p-24 bg-white relative">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full blur-3xl opacity-50 -mr-32 -mt-32" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl opacity-50 -ml-32 -mb-32" />
+
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="max-w-md w-full"
+            transition={{ duration: 0.5 }}
+            className="max-w-md w-full relative z-10"
           >
-            <div className="lg:hidden flex items-center justify-center gap-3 mb-12">
-              <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
-                <Wallet className="text-white w-7 h-7" />
+            <div className="lg:hidden flex items-center justify-center gap-4 mb-16">
+              <div className="w-14 h-14 bg-zinc-950 rounded-2xl flex items-center justify-center shadow-xl">
+                <Wallet className="text-white w-8 h-8" />
               </div>
-              <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Financial Tracker</h1>
+              <h1 className="text-3xl font-bold text-zinc-950 tracking-tight">Financial Tracker</h1>
             </div>
 
-            <Card className="p-8 lg:p-12 border-zinc-200 shadow-xl shadow-zinc-200/50">
-              <div className="text-center mb-10">
-                <h3 className="text-2xl font-bold text-zinc-900 mb-2">Welcome Back</h3>
-                <p className="text-zinc-500">Sign in to access your dashboard and manage your finances.</p>
-              </div>
+            <div className="text-center mb-12">
+              <h3 className="text-4xl font-bold text-slate-900 mb-4 tracking-tight">Welcome back</h3>
+              <p className="text-slate-500 text-lg">Sign in to your account to continue managing your financial journey.</p>
+            </div>
 
-              <Button 
-                onClick={handleLogin} 
-                className="w-full py-4 text-lg flex items-center justify-center gap-3 bg-white hover:bg-zinc-50 text-zinc-900 border border-zinc-200 shadow-sm transition-all active:scale-[0.98]"
-              >
-                <img 
-                  src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
-                  alt="Google" 
-                  className="w-6 h-6"
-                />
-                Continue with Google
-              </Button>
+            <Button 
+              onClick={handleLogin} 
+              className="w-full py-4 text-lg font-bold flex items-center justify-center gap-4 bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 shadow-premium transition-all active:scale-[0.98] rounded-2xl"
+            >
+              <img 
+                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
+                alt="Google" 
+                className="w-6 h-6"
+              />
+              Continue with Google
+            </Button>
 
-              <div className="mt-10 pt-10 border-t border-zinc-100">
-                <div className="flex items-center gap-4 text-sm text-zinc-400 mb-6">
-                  <div className="h-px bg-zinc-100 flex-1" />
-                  <span>Trusted by thousands</span>
-                  <div className="h-px bg-zinc-100 flex-1" />
-                </div>
-                <div className="flex justify-center gap-8 opacity-40 grayscale">
-                  <div className="font-bold text-xl">FINANCE</div>
-                  <div className="font-bold text-xl">SECURE</div>
-                  <div className="font-bold text-xl">TRUST</div>
-                </div>
+            <div className="mt-16 pt-12 border-t border-slate-100">
+              <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8 justify-center">
+                <div className="h-px bg-slate-100 flex-1" />
+                <span>Trusted by modern teams</span>
+                <div className="h-px bg-slate-100 flex-1" />
               </div>
-            </Card>
+              <div className="flex justify-center gap-10 opacity-30 grayscale contrast-125">
+                <div className="font-black text-xl tracking-tighter">FINANCE</div>
+                <div className="font-black text-xl tracking-tighter">SECURE</div>
+                <div className="font-black text-xl tracking-tighter">TRUST</div>
+              </div>
+            </div>
             
-            <p className="text-center mt-8 text-zinc-400 text-sm">
-              By signing in, you agree to our Terms of Service and Privacy Policy.
+            <p className="text-center mt-12 text-slate-400 text-xs font-medium leading-relaxed">
+              By signing in, you agree to our <a href="#" className="text-indigo-600 hover:underline">Terms of Service</a> and <a href="#" className="text-indigo-600 hover:underline">Privacy Policy</a>.
             </p>
           </motion.div>
         </div>
@@ -536,7 +554,7 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-zinc-50 font-sans overflow-hidden">
+    <div className="flex flex-col lg:flex-row h-screen bg-slate-50 font-sans overflow-hidden">
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
@@ -546,34 +564,39 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto pb-20 lg:pb-0">
-        <header className="h-16 lg:h-20 border-b border-zinc-200 bg-white/80 backdrop-blur-md sticky top-0 z-30 px-4 lg:px-10 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-zinc-900 capitalize">{activeTab}</h2>
-          <div className="flex items-center gap-2 lg:gap-4">
+        <header className="h-16 lg:h-24 border-b border-slate-100 bg-white/70 backdrop-blur-xl sticky top-0 z-30 px-6 lg:px-12 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900 capitalize tracking-tight">{activeTab}</h2>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest hidden lg:block">
+              {format(new Date(), 'EEEE, MMMM do')}
+            </p>
+          </div>
+          <div className="flex items-center gap-3 lg:gap-6">
             {activeTab === 'income' && (
-              <Button onClick={() => { setEditingIncome(null); setIncomeForm({ amount: '', description: '', source: 'Salary', date: format(new Date(), 'yyyy-MM-dd') }); setIsAddIncomeModalOpen(true); }} className="px-3 lg:px-4 py-1.5 lg:py-2 text-sm lg:text-base">
+              <Button onClick={() => { setEditingIncome(null); setIncomeForm({ amount: '', description: '', source: 'Salary', date: format(new Date(), 'yyyy-MM-dd') }); setIsAddIncomeModalOpen(true); }} className="px-4 lg:px-6 py-2 lg:py-3 text-sm font-bold rounded-2xl shadow-premium">
                 <Plus className="w-4 h-4 lg:w-5 h-5" />
                 <span className="hidden sm:inline">Add Income</span>
               </Button>
             )}
             {activeTab === 'expenses' && (
-              <Button onClick={() => { setEditingExpense(null); setExpenseForm({ amount: '', description: '', categoryId: categories[0]?.id || '', date: format(new Date(), 'yyyy-MM-dd') }); setIsAddExpenseModalOpen(true); }} className="px-3 lg:px-4 py-1.5 lg:py-2 text-sm lg:text-base">
+              <Button onClick={() => { setEditingExpense(null); setExpenseForm({ amount: '', description: '', categoryId: categories[0]?.id || '', date: format(new Date(), 'yyyy-MM-dd') }); setIsAddExpenseModalOpen(true); }} className="px-4 lg:px-6 py-2 lg:py-3 text-sm font-bold rounded-2xl shadow-premium">
                 <Plus className="w-4 h-4 lg:w-5 h-5" />
                 <span className="hidden sm:inline">Add Expense</span>
               </Button>
             )}
             {activeTab === 'categories' && (
-              <Button onClick={() => { setEditingCategory(null); setCategoryForm({ name: '', icon: AVAILABLE_ICONS[0], color: AVAILABLE_COLORS[0], budget: '' }); setIsAddCategoryModalOpen(true); }} className="px-3 lg:px-4 py-1.5 lg:py-2 text-sm lg:text-base">
+              <Button onClick={() => { setEditingCategory(null); setCategoryForm({ name: '', icon: AVAILABLE_ICONS[0], color: AVAILABLE_COLORS[0], budget: '' }); setIsAddCategoryModalOpen(true); }} className="px-4 lg:px-6 py-2 lg:py-3 text-sm font-bold rounded-2xl shadow-premium">
                 <Plus className="w-4 h-4 lg:w-5 h-5" />
                 <span className="hidden sm:inline">Add Category</span>
               </Button>
             )}
-            <div className="lg:hidden w-8 h-8 rounded-full bg-zinc-100 border border-zinc-200 overflow-hidden">
+            <div className="lg:hidden w-10 h-10 rounded-2xl bg-slate-100 border border-slate-200 overflow-hidden shadow-sm">
               <img src={user.photoURL || ''} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             </div>
           </div>
         </header>
 
-        <div className="p-4 lg:p-10 max-w-7xl mx-auto space-y-6 lg:space-y-8">
+        <div className="p-6 lg:p-12 max-w-7xl mx-auto space-y-8 lg:space-y-12">
           {activeTab === 'dashboard' && (
             <Dashboard 
               expenses={expenses}
@@ -664,6 +687,7 @@ export default function App() {
         setExpenseForm={setExpenseForm}
         handleSaveExpense={handleSaveExpense}
         categories={categories}
+        isSaving={isSaving}
       />
 
       <CategoryModal 
@@ -673,6 +697,7 @@ export default function App() {
         categoryForm={categoryForm}
         setCategoryForm={setCategoryForm}
         handleSaveCategory={handleSaveCategory}
+        isSaving={isSaving}
       />
 
       <IncomeModal 
@@ -682,6 +707,7 @@ export default function App() {
         incomeForm={incomeForm}
         setIncomeForm={setIncomeForm}
         handleSaveIncome={handleSaveIncome}
+        isSaving={isSaving}
       />
 
       <ConfirmModal 
