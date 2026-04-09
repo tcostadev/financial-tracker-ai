@@ -192,11 +192,11 @@ export default function App() {
   // Expense CRUD
   const handleSaveExpense = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !expenseForm.amount || !expenseForm.description || !expenseForm.categoryId) return;
+    if (!user || !expenseForm.amount || !expenseForm.categoryId) return;
 
     const data = {
       amount: parseFloat(expenseForm.amount),
-      description: expenseForm.description,
+      description: expenseForm.description || '',
       date: expenseForm.date,
       categoryId: expenseForm.categoryId,
       uid: user.uid

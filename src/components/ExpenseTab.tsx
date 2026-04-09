@@ -98,7 +98,7 @@ export const ExpenseTab = ({
                       <span className="text-sm font-medium text-slate-400">{format(parseISO(expense.date), 'MMM dd, yyyy')}</span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <span className="font-bold text-slate-900 font-mono">-${expense.amount.toFixed(2)}</span>
+                      <span className="font-bold text-slate-900 font-mono">-€{expense.amount.toFixed(2)}</span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -137,7 +137,7 @@ export const ExpenseTab = ({
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <p className="font-bold text-zinc-900">-${expense.amount.toFixed(2)}</p>
+                    <p className="font-bold text-zinc-900">-€{expense.amount.toFixed(2)}</p>
                     <p className="text-[10px] text-zinc-500 uppercase tracking-wider">{category?.name || 'Uncategorized'}</p>
                   </div>
                   <div className="flex flex-col gap-2">

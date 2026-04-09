@@ -132,11 +132,11 @@ export const ReportsTab = ({ setActiveTab, expenses, categories }: ReportsTabPro
                         "px-2 py-4 text-center text-sm font-mono",
                         amount > 0 ? "text-slate-900" : "text-slate-300"
                       )}>
-                        {amount > 0 ? `$${amount.toFixed(0)}` : '-'}
+                        {amount > 0 ? `€${amount.toFixed(0)}` : '-'}
                       </td>
                     ))}
                     <td className="px-4 py-4 text-right text-sm font-bold text-slate-900 bg-slate-50/30 print:bg-transparent font-mono">
-                      ${rowTotal.toLocaleString(undefined, { minimumFractionDigits: 0 })}
+                      €{rowTotal.toLocaleString(undefined, { minimumFractionDigits: 0 })}
                     </td>
                   </tr>
                 );
@@ -147,11 +147,11 @@ export const ReportsTab = ({ setActiveTab, expenses, categories }: ReportsTabPro
                 <td className="px-4 py-4 font-bold text-xs uppercase tracking-widest sticky left-0 bg-slate-900 print:bg-slate-100">Monthly Total</td>
                 {monthTotals.map((total, i) => (
                   <td key={i} className="px-2 py-4 text-center text-sm font-bold font-mono">
-                    ${total.toFixed(0)}
+                    €{total.toFixed(0)}
                   </td>
                 ))}
                 <td className="px-4 py-4 text-right text-sm font-black bg-indigo-600 print:bg-slate-200 font-mono">
-                  ${grandTotal.toLocaleString()}
+                  €{grandTotal.toLocaleString()}
                 </td>
               </tr>
             </tfoot>
@@ -164,12 +164,12 @@ export const ReportsTab = ({ setActiveTab, expenses, categories }: ReportsTabPro
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-indigo-600 print:text-zinc-500">Average Monthly Spending</span>
-                <span className="font-bold text-indigo-900 print:text-zinc-900">${(grandTotal / 12).toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                <span className="font-bold text-indigo-900 print:text-zinc-900">€{(grandTotal / 12).toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-indigo-600 print:text-zinc-500">Highest Spending Month</span>
                 <span className="font-bold text-indigo-900 print:text-zinc-900">
-                  {MONTHS[monthTotals.indexOf(Math.max(...monthTotals))]} (${Math.max(...monthTotals).toLocaleString()})
+                  {MONTHS[monthTotals.indexOf(Math.max(...monthTotals))]} (€{Math.max(...monthTotals).toLocaleString()})
                 </span>
               </div>
             </div>

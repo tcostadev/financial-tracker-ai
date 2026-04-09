@@ -48,7 +48,7 @@ export const CategoryModal = ({
         <div className="space-y-2">
           <label className="text-sm font-semibold text-zinc-700">Monthly Budget (Optional)</label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 font-bold">$</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 font-bold">€</span>
             <Input 
               type="number" 
               placeholder="0.00" 

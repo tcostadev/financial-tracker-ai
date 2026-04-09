@@ -60,7 +60,7 @@ export const Dashboard = ({
   const [showExpenses, setShowExpenses] = useState(false);
   const [showBudget, setShowBudget] = useState(false);
 
-  const formatValue = (value: number) => `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const formatValue = (value: number) => `€${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const mask = '••••••';
 
   return (
@@ -178,7 +178,7 @@ export const Dashboard = ({
             </div>
             <p className="text-[10px] font-bold text-slate-400 text-right uppercase tracking-wider">
               {showBudget 
-                ? `$${totalSpentThisMonth.toLocaleString()} / $${monthlyBudget.toLocaleString()}` 
+                ? `€${totalSpentThisMonth.toLocaleString()} / €${monthlyBudget.toLocaleString()}` 
                 : '•••••• / ••••••'}
             </p>
           </div>
@@ -209,11 +209,11 @@ export const Dashboard = ({
                   axisLine={false} 
                   tickLine={false} 
                   tick={{ fill: '#71717a', fontSize: 12 }}
-                  tickFormatter={(value) => `$${value}`}
+                  tickFormatter={(value) => `€${value}`}
                 />
                 <Tooltip 
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
-                  formatter={(value: number) => showExpenses ? [`$${value.toLocaleString()}`, 'Spent'] : ['••••••', 'Spent']}
+                  formatter={(value: number) => showExpenses ? [`€${value.toLocaleString()}`, 'Spent'] : ['••••••', 'Spent']}
                 />
                 <Area 
                   type="monotone" 
@@ -248,7 +248,7 @@ export const Dashboard = ({
                     ))}
                   </Pie>
                   <Tooltip 
-                    formatter={(value: number) => showExpenses ? [`$${value.toLocaleString()}`, 'Spent'] : ['••••••', 'Spent']}
+                    formatter={(value: number) => showExpenses ? [`€${value.toLocaleString()}`, 'Spent'] : ['••••••', 'Spent']}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -260,7 +260,7 @@ export const Dashboard = ({
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
                     <span className="text-sm text-zinc-600">{item.name}</span>
                   </div>
-                  <span className="text-sm font-semibold text-zinc-900">{showExpenses ? `$${item.value.toFixed(0)}` : mask}</span>
+                  <span className="text-sm font-semibold text-zinc-900">{showExpenses ? `€${item.value.toFixed(0)}` : mask}</span>
                 </div>
               ))}
             </div>
@@ -295,7 +295,7 @@ export const Dashboard = ({
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-zinc-900">{showExpenses ? `-$${expense.amount.toFixed(2)}` : '••••••'}</p>
+                  <p className="font-bold text-zinc-900">{showExpenses ? `-€${expense.amount.toFixed(2)}` : '••••••'}</p>
                   <p className="text-xs text-zinc-500">{category?.name || 'Uncategorized'}</p>
                 </div>
               </div>

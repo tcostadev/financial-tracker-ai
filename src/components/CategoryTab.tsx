@@ -51,7 +51,7 @@ export const CategoryTab = ({
           <h4 className="text-xl font-bold text-slate-900 mb-1">{category.name}</h4>
           <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-slate-400">
             <span>Monthly Budget</span>
-            <span className="text-slate-900 font-mono">${category.budget?.toLocaleString() || '0'}</span>
+            <span className="text-slate-900 font-mono">€{category.budget?.toLocaleString() || '0'}</span>
           </div>
           <div className="mt-4 w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
             <motion.div 
